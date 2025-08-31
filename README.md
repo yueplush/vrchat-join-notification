@@ -24,7 +24,7 @@ python 3.13 or higher
 
 ---
 
-# Install (One-liner)
+# Install
 
 ```bash
 git clone https://github.com/yueplush/vrchat-join-notification.git
