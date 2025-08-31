@@ -62,6 +62,17 @@ systemctl --user daemon-reload
 systemctl --user enable --now vrc-join-notify.service
 
 Configuration
+
+open the vrc-join-notify.service and edit:
+
+[Service] tab line, then
+ExecStart=%h/.local/bin/vrc_join_notify.py --self "YourVRChatUSERNAME"
+"YourVRChatUSERNAME" editing your VRChat Names "VRChatUser(sample)"
+then like this
+ExecStart=%h/.local/bin/vrc_join_notify.py --self "VRChatUser"
+
+Notification Configuration
+
 Open the top of vrc_join_notify.py and edit:
 
 TITLE = "VRChat"
