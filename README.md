@@ -1,4 +1,4 @@
-## Pushover support version has here
+## ※Pushover support version has here
 https://github.com/yueplush/vrchat-join-notification-with-pushover
 
 # VRChat Join Notification (Linux)
