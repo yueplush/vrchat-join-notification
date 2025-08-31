@@ -16,6 +16,10 @@ No unofficial API calls – it only reads your **local VRChat logs** (safe and T
 - Quick installer (`install.sh`) with distro detection (Debian/Ubuntu, Fedora/Bazzite, Arch/Manjaro)
 
 ---
+## depency
+python 3.13 or higher
+
+---
 
 # Install (One-liner)
 
