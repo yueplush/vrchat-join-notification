@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-VRChat Join Notifier (Linux)
-- Watches VRChat log files for "OnPlayerJoined" events.
-- Sends a desktop notification via `notify-send` when someone joins your instance.
-"""
+# VRChat Join Notifier (Linux) — self join filter
 import time, os, re, sys, subprocess
 from pathlib import Path
 
 TITLE = "VRChat"
-ICON = None   # e.g. "/path/to/icon.png"
-SOUND = None  # e.g. "/usr/share/sounds/freedesktop/stereo/message.oga"
+ICON = None
+SOUND = None
 
 JOIN_PATTERNS = [
     re.compile(r"OnPlayerJoined", re.IGNORECASE),
@@ -18,6 +14,14 @@ JOIN_PATTERNS = [
 EXTRACT_PATTERNS = [
     re.compile(r"OnPlayerJoined.*?\s([^\]\)\}]+)$", re.IGNORECASE),
     re.compile(r'displayName"\s*:\s*"([^"]+)"', re.IGNORECASE),
+]
+
+# --- try to detect "self" display name from log noise ---
+SELF_PATTERNS = [
+    re.compile(r'displayName"\s*:\s*"([^"]+)"\s*,\s*"id"\s*:\s*"\w+"\s*,\s*"isFriend"\s*:\s*false.*?"currentUser":\s*{', re.I),
+    re.compile(r'APIUser[^}]*displayName"\s*:\s*"([^"]+)"', re.I),
+    re.compile(r'Authenticated\s+as\s+([^\r\n]+)', re.I),
+    re.compile(r'Local\s+user\s*:\s*([^\r\n]+)', re.I),
 ]
 
 HOME = Path.home()
@@ -59,15 +63,40 @@ def extract_name(line: str) -> str:
     for rx in EXTRACT_PATTERNS:
         m = rx.search(line)
         if m:
-            name = m.group(1).strip().strip("[]{}()<>\"' ")
-            return name
+            return m.group(1).strip().strip("[]{}()<>\"' ")
     return ""
 
-def tail_f(path: Path):
+def detect_self_name(path: Path, override_cli: str | None) -> str:
+    if override_cli:   # --self "NAME"
+        return override_cli.strip()
+    env = os.environ.get("VRC_SELF_NAME", "").strip()
+    if env:
+        return env
+    # best-effort: scan recent tail of file for a likely "self" name
+    try:
+        with open(path, "r", errors="ignore", encoding="utf-8", newline="") as f:
+            f.seek(0, os.SEEK_END)
+            size = f.tell()
+            f.seek(max(0, size - 200_000))  # last ~200KB
+            chunk = f.read()
+        for rx in SELF_PATTERNS:
+            m = rx.search(chunk)
+            if m:
+                return m.group(1).strip().strip("[]{}()<>\"' ")
+    except Exception:
+        pass
+    return ""  # unknown
+
+def tail_f(path: Path, self_name: str):
     print(f"[info] Following: {path}")
+    if self_name:
+        print(f"[info] Self name filter: '{self_name}' (case-insensitive)")
     f = open(path, "r", errors="ignore", encoding="utf-8", newline="")
     f.seek(0, os.SEEK_END)
     last_check = time.time()
+
+    def is_self(n: str) -> bool:
+        return bool(self_name) and n.lower() == self_name.lower()
 
     while True:
         line = f.readline()
@@ -83,27 +112,50 @@ def tail_f(path: Path):
                     f.seek(0, os.SEEK_END)
             time.sleep(0.5)
             continue
+
         for pat in JOIN_PATTERNS:
             if pat.search(line):
                 name = extract_name(line)
+                if name and is_self(name):
+                    print(f"[skip] self joined: {name}")
+                    break
                 if name:
                     notify(f"Player joined: {name}")
                     print(f"[join] {name}")
                 else:
+                    # unknown name — still notify unless we KNOW it's self (we don't)
                     notify("A player joined your instance")
                     print("[join] <unknown>")
                 break
 
+def parse_args():
+    # very small arg parser for: --self "NAME"
+    self_name = None
+    args = sys.argv[1:]
+    i = 0
+    while i < len(args):
+        if args[i] == "--self":
+            if i + 1 >= len(args):
+                print("Usage: vrc_join_notify.py [--self YOUR_DISPLAY_NAME]", file=sys.stderr)
+                sys.exit(2)
+            self_name = args[i+1]
+            i += 2
+        else:
+            print(f"Unknown option: {args[i]}", file=sys.stderr)
+            print("Usage: vrc_join_notify.py [--self YOUR_DISPLAY_NAME]", file=sys.stderr)
+            sys.exit(2)
+    return self_name
+
 def main():
     path = find_latest_log()
     if not path:
-        print("VRChat log not found.", file=sys.stderr)
-        sys.exit(2)
+        print("VRChat log not found.", file=sys.stderr); sys.exit(2)
+    override_cli = parse_args()
+    self_name = detect_self_name(path, override_cli)
     try:
-        tail_f(path)
+        tail_f(path, self_name)
     except KeyboardInterrupt:
-        print("\n[info] Exiting.")
-        sys.exit(0)
+        print("\n[info] Exiting."); sys.exit(0)
 
 if __name__ == "__main__":
     main()
