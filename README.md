@@ -15,5 +15,6 @@ cd vrchat-join-notification
 ./install.sh
 
 ## uninstall
+```bash
 cd vrchat-join-notification
 ./uninstall.sh
