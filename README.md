@@ -46,6 +46,17 @@ chmod +x uninsatll.sh
 bash ./uninstall.sh
 ```
 
+# Configuration
+
+Open the top of vrc_join_notify.py and edit:
+```bash
+TITLE = "VRChat"
+ICON = "/path/to/icon.png"   # Optional
+SOUND = "/usr/share/sounds/freedesktop/stereo/message.oga"  # Optional
+```
+Change ICON to use a custom PNG in notifications
+Change SOUND to play a sound using paplay
+
 License
 MIT
 
