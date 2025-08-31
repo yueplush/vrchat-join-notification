@@ -40,9 +40,9 @@ cd vrchat-join-notification
 ## Manual Setup
 
 # Install dependency
-# Ubuntu/Debian: sudo apt install libnotify-bin
-# Fedora/Bazzite: sudo dnf install libnotify
-# Arch/Manjaro: sudo pacman -S libnotify
+Ubuntu/Debian: sudo apt install libnotify-bin
+Fedora/Bazzite: sudo dnf install libnotify
+Arch/Manjaro: sudo pacman -S libnotify
 
 # Place script
 mkdir -p ~/.local/bin
