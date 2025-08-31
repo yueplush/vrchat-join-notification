@@ -54,14 +54,14 @@ then swap PUSHOVER_TOKEN's XXXXX and PUSHOVER_USER's XXXXX
 
 ```bash  
 [Unit]
-Description=VRChat Join Notifier (user)
+Description=Remote Desktop Notification Receiver
 After=default.target
 
 [Service]
 Type=simple
-Environment=PUSHOVER_TOKEN=XXXXX   # Application/API Token
-Environment=PUSHOVER_USER=XXXXX   # User Key
-ExecStart=%h/.local/bin/vrc_join_notify.py 
+Environment=REMOTE_ENDPOINTS=http://192.168.X.XX:8765
+Environment=REMOTE_TOKEN=CHANGE-YOUR-OWN-PASSWORD
+ExecStart=%h/.local/bin/vrc_join_notify.py
 Restart=always
 RestartSec=2
 
