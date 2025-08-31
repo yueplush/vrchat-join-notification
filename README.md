@@ -7,7 +7,6 @@ Watches Proton/Flatpak VRChat logs and auto-switches on restart.
 No unofficial API calls (local log reading only).
 
 ## how to uninstall
-```bash
 ./uninstall.sh
 
 ## How to use this.
