@@ -8,7 +8,7 @@ No unofficial API calls – it only reads your **local VRChat logs** (safe and T
 
 ---
 
-## Features
+# Features
 - ToS-safe: no API keys, only local logs
 - Desktop notification via `notify-send`
 - Auto-switches to the latest VRChat log after restart
@@ -17,7 +17,7 @@ No unofficial API calls – it only reads your **local VRChat logs** (safe and T
 
 ---
 
-## Install (One-liner)
+# Install (One-liner)
 
 ```bash
 git clone https://github.com/yueplush/vrchat-join-notification.git
@@ -31,7 +31,7 @@ Install dependencies (libnotify) if supported
 Copy the script to ~/.local/bin/vrc_join_notify.py
 Register and start the systemd user service vrc-join-notify.service
 
-## uninstall
+# uninstall
 
 ```bash
 cd vrchat-join-notification
@@ -39,19 +39,19 @@ chmod +x uninsatll.sh
 ./uninstall.sh
 ```
 
-## Manual Setup
+# Manual Setup
 
-# Install dependency
+## Install dependency
 Ubuntu/Debian: sudo apt install libnotify-bin
 Fedora/Bazzite: sudo dnf install libnotify
 Arch/Manjaro: sudo pacman -S libnotify
 
-# Place script
+## Place script
 mkdir -p ~/.local/bin
 cp vrc_join_notify.py ~/.local/bin/
 chmod +x ~/.local/bin/vrc_join_notify.py
 
-# Place systemd service
+## Place systemd service
 mkdir -p ~/.config/systemd/user
 cp vrc-join-notify.service ~/.config/systemd/user/
 systemctl --user daemon-reload
