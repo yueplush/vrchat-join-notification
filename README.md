@@ -46,52 +46,6 @@ chmod +x uninsatll.sh
 bash ./uninstall.sh
 ```
 
-# Manual Setup
-
-## Install dependency
-Ubuntu/Debian: sudo apt install libnotify-bin
-Fedora/Bazzite: sudo dnf install libnotify
-Arch/Manjaro: sudo pacman -S libnotify
-
-## Place script
-mkdir -p ~/.local/bin
-cp vrc_join_notify.py ~/.local/bin/
-chmod +x ~/.local/bin/vrc_join_notify.py
-
-## Place systemd service
-mkdir -p ~/.config/systemd/user
-cp vrc-join-notify.service ~/.config/systemd/user/
-systemctl --user daemon-reload
-systemctl --user enable --now vrc-join-notify.service
-
-Configuration
-
-open the vrc-join-notify.service and edit:
-
-[Service] tab line, then
-ExecStart=%h/.local/bin/vrc_join_notify.py --self "YourVRChatUSERNAME"
-"YourVRChatUSERNAME" editing your VRChat Names "VRChatUser(sample)"
-then like this
-ExecStart=%h/.local/bin/vrc_join_notify.py --self "VRChatUser"
-
-Notification Configuration
-
-Open the top of vrc_join_notify.py and edit:
-
-TITLE = "VRChat"
-ICON = "/path/to/icon.png"   # Optional
-SOUND = "/usr/share/sounds/freedesktop/stereo/message.oga"  # Optional
-
-Change ICON to use a custom PNG in notifications
-Change SOUND to play a sound using paplayDevelopment
-
-Works on Linux + Steam/Proton and Flatpak Steam
-
-Watches log files under:
-~/.local/share/Steam/steamapps/compatdata/438100/.../VRChat/VRChat
-~/.var/app/com.valvesoftware.Steam/.../VRChat/VRChat
-~/.config/unity3d/VRChat/VRChat
-
 License
 MIT
 
