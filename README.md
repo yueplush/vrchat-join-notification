@@ -61,8 +61,8 @@ SOUND = "/usr/share/sounds/freedesktop/stereo/message.oga"  # Optional
 Change ICON to use a custom PNG in notifications
 Change SOUND to play a sound using paplay
 
-License
-MIT
+# other info
+MIT License
 
 
 
