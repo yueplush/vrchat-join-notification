@@ -46,39 +46,6 @@ chmod +x uninsatll.sh
 bash ./uninstall.sh
 ```
 
-# Basic Configuration
-auth for Pushover (https://pushover.net/)
-Open the top of ~/.config/systemd/user/vrc-join-notify.service and edit:
-example: sudo nano ~/.config/systemd/user/vrc-join-notify.service
-then swap PUSHOVER_TOKEN's XXXXX and PUSHOVER_USER's XXXXX
-
-```bash  
-[Unit]
-Description=Remote Desktop Notification Receiver
-After=default.target
-
-[Service]
-Type=simple
-Environment=REMOTE_ENDPOINTS=http://192.168.X.XX:8765
-Environment=REMOTE_TOKEN=CHANGE-YOUR-OWN-PASSWORD
-ExecStart=%h/.local/bin/vrc_join_notify.py
-Restart=always
-RestartSec=2
-
-[Install]
-WantedBy=default.target
-```
-
-token(API key), and user key has just access to https://pushover.net/ create your account (you can also free-trial 30 day)
-if dont wont proprietary here use this without proprietary version.
-https://github.com/yueplush/vrchat-join-notification
-
-after apply setting, then run this command for reset
-
-```bash
-systemctl --user daemon-reload
-systemctl --user restart vrc-join-notify.service
-```
 # if you want change something notification style
 Open the top of vrc_join_notify.py and edit:
 
