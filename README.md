@@ -48,6 +48,31 @@ bash ./uninstall.sh
 
 # Configuration
 
+Open the top of ~/.config/systemd/user/vrc-join-notify.service and edit:
+example: sudo nano ~/.config/systemd/user/vrc-join-notify.service
+then
+
+```bash  
+[Unit]
+Description=VRChat Join Notifier (user)
+After=default.target
+
+[Service]
+Type=simple
+Environment=PUSHOVER_TOKEN=aok9oitu14k19pyynoqactfmenfh28   # Application/API Token
+Environment=PUSHOVER_USER=uhbp1vszi3x8dfvxo36qrxghj2stbq   # User Key
+ExecStart=%h/.local/bin/vrc_join_notify.py 
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
+```
+
+token, and user key has just access to https://pushover.net/ (you can free-trial 30 day)
+if dont wont proprietary here use this
+https://github.com/yueplush/vrchat-join-notification
+
 Open the top of vrc_join_notify.py and edit:
 ```bash
 TITLE = "VRChat"
