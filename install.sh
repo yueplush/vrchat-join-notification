@@ -23,7 +23,8 @@ Usage: ./install.sh [--no-deps] [--no-start] [--linger]
 USAGE
 }
 
-for arg in "${@:-}"; do
+# --- parse args (no phantom empty-arg bug) ---
+for arg in "$@"; do
   case "$arg" in
     --no-deps)  INSTALL_DEPS=0 ;;
     --no-start) START_SERVICE=0 ;;
@@ -33,8 +34,9 @@ for arg in "${@:-}"; do
   esac
 done
 
+# --- sanity checks ---
 if [[ ! -f "$SCRIPT_SRC" || ! -f "$SERVICE_SRC" ]]; then
-  echo "Error: vrc_join_notify.py or vrc-join-notify.service not found next to install.sh"
+  echo "Error: vrc_join_notify.py or vrc-join-notify.service not found next to install.sh" >&2
   exit 1
 fi
 
@@ -44,6 +46,7 @@ detect_distro_and_install() {
     return
   fi
 
+  local DISTRO="unknown"
   if [[ -f /etc/os-release ]]; then
     # shellcheck disable=SC1091
     . /etc/os-release
@@ -52,7 +55,6 @@ detect_distro_and_install() {
     echo "[warn] /etc/os-release not found. Skipping dependency install."
     return
   fi
-
   echo "[info] Detected distro: ${DISTRO}"
 
   case "$DISTRO" in
@@ -70,6 +72,10 @@ detect_distro_and_install() {
       echo "[warn] Unsupported distro '$DISTRO'. Please install 'notify-send' (libnotify) manually."
       ;;
   esac
+
+  if ! command -v notify-send >/dev/null 2>&1; then
+    echo "[warn] 'notify-send' not found in PATH. Make sure libnotify is installed correctly." >&2
+  fi
 }
 
 place_files() {
@@ -95,6 +101,12 @@ enable_linger_if_requested() {
 start_service() {
   if [[ "$START_SERVICE" -eq 0 ]]; then
     echo "[info] Not starting service (--no-start)."
+    return
+  fi
+
+  if ! command -v systemctl >/dev/null 2>&1; then
+    echo "[warn] systemctl not found. Skipping service start. You can run the script directly:"
+    echo "      $BIN_DIR/vrc_join_notify.py"
     return
   fi
 
