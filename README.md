@@ -15,6 +15,9 @@ No unofficial API calls – it only reads your **local VRChat logs** (safe and T
 - Optional: custom icon or sound
 - Quick installer (`install.sh`) with distro detection (Debian/Ubuntu, Fedora/Bazzite, Arch/Manjaro)
 
+## Specified behavior
+The popup will still appear when you join the world, so please be patient.
+
 ---
 ## depency
 python 3.13 or higher
