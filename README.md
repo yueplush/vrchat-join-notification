@@ -6,6 +6,10 @@ Uses notify-send (libnotify).
 Watches Proton/Flatpak VRChat logs and auto-switches on restart.
 No unofficial API calls (local log reading only).
 
+## how to uninstall
+```bash
+./uninstall.sh
+
 ## How to use this.
 
 ## Install (one-liner)
@@ -13,8 +17,3 @@ No unofficial API calls (local log reading only).
 git clone https://github.com/yueplush/vrchat-join-notification.git
 cd vrchat-join-notification
 ./install.sh
-
-## uninstall
-```bash
-cd vrchat-join-notification
-./uninstall.sh
