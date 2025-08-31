@@ -22,6 +22,7 @@ No unofficial API calls – it only reads your **local VRChat logs** (safe and T
 ```bash
 git clone https://github.com/yueplush/vrchat-join-notification.git
 cd vrchat-join-notification
+chmod +x installsh
 ./install.sh
 ```
 
@@ -34,6 +35,7 @@ Register and start the systemd user service vrc-join-notify.service
 
 ```bash
 cd vrchat-join-notification
+chmod +x uninsatll.sh
 ./uninstall.sh
 ```
 
