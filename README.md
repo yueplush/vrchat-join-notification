@@ -29,7 +29,7 @@ python 3.13 or higher
 ```bash
 git clone https://github.com/yueplush/vrchat-join-notification.git
 cd vrchat-join-notification
-chmod +x installsh
+chmod +x install.sh
 bash ./install.sh
 ```
 
